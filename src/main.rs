@@ -20,7 +20,8 @@ use neutrino::utils::theme::Theme;
 use neutrino::widgets::label::Label;
 
 fn main() {
-    let images = Rc::new(RefCell::new(Images::new("/home/diego/rust/cucchiaio/Images_")));
+    let images = Rc::new(RefCell::new(Images::new(".")));
+//    let images = Rc::new(RefCell::new(Images::new("/home/diego/rust/cucchiaio/Images_")));
 
     // Image
 
