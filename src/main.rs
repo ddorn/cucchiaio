@@ -30,6 +30,7 @@ fn main() {
     let mut image = Image::from_path("my_image", "");
     image.set_keep_ratio_aspect();
     image.set_listener(Box::new(image_listener));
+    image.set_style("height: 700px");
 
     // Previous button
 
@@ -71,7 +72,8 @@ fn main() {
 
     let mut window = Window::new();
     window.set_title("Image viewer");
-    window.set_size(640, 480);
+    window.set_size(1366, 768);
+//    window.set_resizable();
     window.set_child(Box::new(root));
     window.set_listener(Box::new(window_listener));
     window.set_theme(Theme::Adwaita);

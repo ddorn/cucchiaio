@@ -16,7 +16,7 @@ fn quality_to_color(quality: &Quality) -> &str {
     match quality {
         Quality::Good => "#20ff60",
         Quality::Bad => "#ff6030",
-        Quality::Neutral => "#fffff",
+        _ => "#fffff",
     }
 }
 
@@ -54,6 +54,7 @@ impl LabelListener for QualityLabelListener {
             Quality::Good => "Good",
             Quality::Bad => "Bad",
             Quality::Neutral => "Neutral",
+            Quality::NotSeen => "Not Seen",
         };
         state.set_text(label);
         state.set_style(&format!("background: {}; text-align: center", quality_to_color(self.images.borrow().selected_quality())));
@@ -117,7 +118,12 @@ impl WindowListener for MyWindowListener {
         let mut images = self.images.borrow_mut();
         match key {
             Key::H => images.previous(),
-            Key::L => images.next(),
+            Key::L => {
+                if let Quality::NotSeen = images.selected_quality() {
+                    images.set_quality(Quality::Neutral);
+                }
+                images.next();
+            },
             Key::X | Key::J => {
                 images.set_quality(Quality::Bad);
                 images.next()

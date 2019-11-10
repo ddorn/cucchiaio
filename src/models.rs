@@ -1,10 +1,11 @@
-use crate::models::Quality::Neutral;
+use crate::models::Quality::{Neutral, NotSeen};
 use std::path::{PathBuf};
 
 pub enum Quality {
     Bad,
     Good,
     Neutral,
+    NotSeen,
 }
 
 pub struct Image {
@@ -16,7 +17,7 @@ impl Image {
     pub fn new(path: &str) -> Self {
         Self {
             path: PathBuf::from(path),
-            quality: Neutral,
+            quality: NotSeen,
         }
     }
 }
@@ -29,16 +30,16 @@ pub struct Images {
 
 impl Images {
     pub fn new(dir_path: &str) -> Self {
-        let paths : Vec<Image> = std::fs::read_dir(dir_path).unwrap()
+        let mut paths : Vec<String> = std::fs::read_dir(dir_path).unwrap()
             .filter_map(|p| p.ok())
             .map(|p| p.path().into_os_string().into_string().unwrap())
             .filter(|p| p.ends_with(".jpg"))
-            .map(|p| Image::new(&p))
             .collect();
+        paths.sort();
 
         Self {
             directory: std::path::PathBuf::from(dir_path),
-            paths: paths,
+            paths: paths.iter().map(|p| Image::new(&p)).collect(),
             selected: 0,
         }
     }
@@ -88,6 +89,7 @@ impl Images {
                 Quality::Bad => &bad,
                 Quality::Good => &good,
                 Neutral => &ok,
+                NotSeen => continue,
             };
             std::fs::rename(&img.path, folder.join(filename));
         }
