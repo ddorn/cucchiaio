@@ -94,6 +94,7 @@ impl Images {
             std::fs::rename(&img.path, folder.join(filename));
         }
 
+        println!("Done !")
 
     }
 }
