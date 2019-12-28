@@ -33,7 +33,10 @@ impl Images {
         let mut paths : Vec<String> = std::fs::read_dir(dir_path).unwrap()
             .filter_map(|p| p.ok())
             .map(|p| p.path().into_os_string().into_string().unwrap())
-            .filter(|p| p.ends_with(".jpg"))
+            .filter(|p| p.to_lowercase().ends_with(".jpg")
+                    || p.to_lowercase().ends_with(".jpeg")
+                    || p.to_lowercase().ends_with(".png")
+                    || p.to_lowercase().ends_with(".gif"))
             .collect();
         paths.sort();
 
